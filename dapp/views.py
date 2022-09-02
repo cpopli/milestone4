@@ -2,6 +2,7 @@ from django.http.response import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
+from rest_framework.permissions import IsAuthenticated
 
 from dapp.models import Project, Issue
 from dapp.serializers import ProjectSerializer, IssueSerializer, AssignSerializer
@@ -9,6 +10,7 @@ from dapp.serializers import ProjectSerializer, IssueSerializer, AssignSerialize
 
 @api_view(['GET', 'POST', 'DELETE'])
 def project_list(request):
+    permission_classes = [IsAuthenticated]
     print("project_list")
     if request.method == 'GET':
         projects = Project.objects.all()
@@ -29,7 +31,8 @@ def project_list(request):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def project_detail(request, pk):
-    print("hey")
+    permission_classes = [IsAuthenticated]
+
     id = pk
     try:
         project = Project.objects.get(id=id)
@@ -58,6 +61,7 @@ def project_detail(request, pk):
 
 @api_view(['GET', 'POST', 'DELETE'])
 def issue_list(request):
+    permission_classes = [IsAuthenticated]
     if request.method == 'GET':
         issue = Issue.objects.all()
         title = request.GET.get('title', None)
@@ -77,6 +81,7 @@ def issue_list(request):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def issue_detail(request, pk):
+    permission_classes = [IsAuthenticated]
     id = pk
     try:
         issue = Issue.objects.get(id=id)
@@ -104,6 +109,7 @@ def issue_detail(request, pk):
 
 @api_view(['GET', 'POST', 'DELETE'])
 def assign(request):
+    permission_classes = [IsAuthenticated]
     if request.method == 'POST':
         assign_data = JSONParser().parse(request)
         assign_serializer = AssignSerializer(data=assign_data)
